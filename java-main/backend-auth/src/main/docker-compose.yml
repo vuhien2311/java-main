@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  springboot-app:
+    build:
+      context: ./backend-auth
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - monitor-net
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: backend_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - monitor-net
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitor-net
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - monitor-net
+
+volumes:
+  mysql-data:
+  grafana-data:
+
+networks:
+  monitor-net:
