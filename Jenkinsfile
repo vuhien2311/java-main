@@ -23,15 +23,16 @@ pipeline {
         stage('Build Project with Maven') {
             steps {
                 echo 'Running mvn clean install...'
-                // Dùng mvn nếu Jenkins đã cài Maven global, hoặc ./mvnw nếu có wrapper
-                bat 'mvn clean install -DskipTests'
+                // Sử dụng đường dẫn đầy đủ đến mvn.cmd để đảm bảo Jenkins tìm thấy Maven
+                bat 'C:\\apache-maven-3.9.11\\bin\\mvn.cmd clean install -DskipTests'
             }
         }
 
         stage('Run Unit Tests') {
             steps {
                 echo 'Running unit tests...'
-                bat 'mvn test'
+                // Sử dụng đường dẫn đầy đủ đến mvn.cmd để đảm bảo Jenkins tìm thấy Maven
+                bat 'C:\\apache-maven-3.9.11\\bin\\mvn.cmd test'
             }
         }
 
